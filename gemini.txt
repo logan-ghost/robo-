@@ -1,0 +1,46 @@
+import robocode.*;
+import java.awt.Color;
+
+// Classe principal do robô
+public class CyanAggressor extends AdvancedRobot {
+
+    // Cores para o robô
+    private static final Color BODY_COLOR = Color.CYAN;
+    private static final Color GUN_COLOR = Color.BLACK;
+    private static final Color RADAR_COLOR = Color.GRAY;
+
+    // Variáveis para o radar e o canhão
+    private double radarAngle = 0;
+    private double gunAngle = 0;
+
+    // Método inicial do robô
+    public void run() {
+        // Configuração do robô
+        setColors(BODY_COLOR, GUN_COLOR, RADAR_COLOR);
+        setAdjustRadarScanSpeed(true);
+        setTurnGunTowardTarget(true);
+        setDistanceKeepAway(100);
+
+        // Loop principal do robô
+        while (true) {
+            // Atualização do radar
+            radarAngle = (radarAngle + 45) % 360;
+            setTurnRadarRight(radarAngle);
+
+            // Escaneamento do inimigo
+            EnemyBot enemy = getScannedEnemy();
+
+            // Se um inimigo for encontrado, atacar
+            if (enemy != null) {
+                // Atualização do canhão
+                gunAngle = getHeading() + getAngleToTarget(enemy.getX(), enemy.getY());
+                setTurnGunRight(gunAngle - getGunHeading());
+
+                // Atirar se o inimigo estiver dentro do alcance
+                if (getDistanceToTarget(enemy.getX(), enemy.getY()) < 200) {
+                    fire(3);
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,23 @@
+import robocode.*;
+
+public class MeuRobo extends Robot {
+    
+    public void run() {
+        setColors(java.awt.Color.cyan, java.awt.Color.cyan, java.awt.Color.cyan); // Define a cor do robô para ciano
+        
+        while (true) {
+            ahead(100); // Move para frente
+            turnGunRight(360); // Gira a arma em um círculo completo
+            back(100); // Move para trás
+            turnGunRight(360); // Gira a arma em um círculo completo
+        }
+    }
+    
+    public void onScannedRobot(ScannedRobotEvent e) {
+        fire(3); // Atira no inimigo com potência 3
+    }
+    
+    public void onHitByBullet(HitByBulletEvent e) {
+        turnLeft(90 - e.getBearing()); // Vira para evitar ser atingido novamente
+    }
+}
